@@ -1,0 +1,58 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow checks out code, builds an image, performs a container image
+# vulnerability scan with Anchore's Grype tool, and integrates the results with GitHub Advanced Security
+# code scanning feature.  For more information on the Anchore scan action usage
+# and parameters, see https://github.com/anchore/scan-action. For more
+# information on Anchore's container image scanning tool Grype, see
+# https://github.com/anchore/grype
+name: Anchore Container Scan
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "master" ]
+  schedule:
+    - cron: '38 21 * * 6'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Anchore-Build-Scan:
+    if: "!contains(github.event.head_commit.message, 'no-github-ci')"
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - name: Build the Docker image
+      run: docker pull python:3-alpine; docker build . --file scripts/Docker/Dockerfile --tag localbuild/testimage:latest
+    - name: List the Docker image
+      run: docker image ls
+    - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
+      uses: anchore/scan-action@c35e932c2a7c572bfdb1c3dbcdadb2d4fc62418d # 3.6.1
+      id: scan
+      with:
+        image: "localbuild/testimage:latest"
+        fail-build: true
+    - name: Upload Anchore Scan Report
+      if: always()
+      uses: github/codeql-action/upload-sarif@65c74964a9ed8c44ed9f19d4bbc5757a6a8e9ab9 # v2.16.1
+      with:
+        sarif_file: ${{ steps.scan.outputs.sarif }}
+    - name: Inspect action SARIF report
+      if: always()
+      run: cat ${{ steps.scan.outputs.sarif }}

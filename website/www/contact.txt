@@ -1,0 +1,43 @@
+.. meta::
+    :description:
+        Instructions for contacting the authors of the Roundup Issue Tracker.
+        Includes mailing lists (hosted by sourceforge), and the IRC
+        channel #roundup on oftc. How to get support from people.
+ 
+
+Contact
+=======
+
+We maintain the following mailing lists:
+
+.. rst-class:: linkspacing
+
+=================== ========================== ===============================
+List Name/Signup    Archive link               Purpose
+=================== ========================== ===============================
+roundup-users_      archives `[SourceForge]`__ how to use Roundup
+roundup-devel_      archives `[SourceForge]`__ develop new Roundup releases
+roundup-checkins_   archives `[SourceForge]`__ automated check-in messages
+=================== ========================== ===============================
+
+These lists are open-access, but moderated to protect them against spam.
+The email address is
+``<the list name from above>@lists.sourceforge.net``.
+
+Please sign up if you intend to mail repeatedly.
+
+You may talk to Roundup developers directly using the `WebChat IRC`_
+interface. You can also use an IRC client: irc://irc.oftc.net/roundup.
+
+
+.. _roundup-users: https://sourceforge.net/projects/roundup/lists/roundup-users
+.. _roundup-devel: https://sourceforge.net/projects/roundup/lists/roundup-devel
+.. _roundup-checkins: https://sourceforge.net/projects/roundup/lists/roundup-checkins
+
+.. __: https://sourceforge.net/p/roundup/mailman/roundup-users/
+
+.. __: https://sourceforge.net/p/roundup/mailman/roundup-devel/
+
+.. __: https://sourceforge.net/p/roundup/mailman/roundup-checkins/
+
+.. _WebChat IRC: https://webchat.oftc.net/?randomnick=1&channels=roundup&prompt=1
